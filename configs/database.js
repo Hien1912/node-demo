@@ -1,7 +1,7 @@
 const Knex = require('knex');
 require('dotenv').config();
 
-module.exports.DB = Knex({
+module.exports = Knex({
     client: process.env.DB_CLIENT || "mysql",
     connection: {
         host: process.env.DB_HOST || "localhost",
