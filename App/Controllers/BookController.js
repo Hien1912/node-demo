@@ -1,5 +1,4 @@
 const Book = require("../Model/Book");
-const DB = require("../../configs/database");
 
 module.exports = {
     index: async (req, res) => {
@@ -13,9 +12,12 @@ module.exports = {
     },
 
     store: async (req, res) => {
-        let { body: data, file } = req;
+        let { body: data } = req;
         Book.create(data)
-            .then(book => res.status(201).send(book))
+            .then(book => {
+                let { data } = book;
+                res.status(201).send(data);
+            })
             .catch(err => {
                 console.log(err.msg);
                 res.sendStatus(err.code);
@@ -25,7 +27,10 @@ module.exports = {
     show: async (req, res) => {
         let { params: { id } } = req;
         Book.getById(id)
-            .then(book => res.send(book.data)).catch(err => {
+            .then(book => {
+                let { data } = book;
+                res.status(201).send(data);
+            }).catch(err => {
                 console.log(err.msg);
                 res.sendStatus(err.code);
             });
@@ -33,7 +38,7 @@ module.exports = {
     },
 
     update: async (req, res) => {
-        let { body: data, file, params: { id } } = req;
+        let { body: data, params: { id } } = req;
         Book.getById(id)
             .then(book => book.update(data))
             .then(book => {
@@ -48,7 +53,6 @@ module.exports = {
 
     destroy: async (req, res) => {
         let { params: { id } } = req;
-        let avatar;
         Book.getById(id)
             .then(book => book.destroy())
             .then(() => {

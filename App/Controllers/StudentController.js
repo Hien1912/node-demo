@@ -18,7 +18,10 @@ module.exports = {
         if (file) data.avatar = file.destination.split("/").slice(1).join("/") + "/" + file.filename;
 
         Student.create(data)
-            .then(student => res.status(201).send(student))
+            .then(student => {
+                let { data } = student;
+                res.status(201).send(data);
+            })
             .catch(err => {
                 console.log(err.msg);
                 res.sendStatus(err.code);
@@ -28,7 +31,10 @@ module.exports = {
     show: async (req, res) => {
         let { params: { id } } = req;
         Student.getById(id)
-            .then(student => res.send(student.data)).catch(err => {
+            .then(student => {
+                let { data } = student;
+                res.status(201).send(data);
+            }).catch(err => {
                 console.log(err.msg);
                 res.sendStatus(err.code);
             });
