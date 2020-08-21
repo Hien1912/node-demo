@@ -25,7 +25,7 @@ Book.get = async (query) => {
                     per_page: per_page,
                 }
             })
-        }).catch(err => reject(err));
+        }).catch(err => reject({ code: 500, msg: err }));
     });
 };
 

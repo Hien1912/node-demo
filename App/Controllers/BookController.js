@@ -3,6 +3,7 @@ const Book = require("../Model/Book");
 module.exports = {
     index: async (req, res) => {
         let { query } = req;
+    
         Book.get(query)
             .then(books => res.send(books))
             .catch(err => {

@@ -4,6 +4,7 @@ const DB = require("../../configs/database");
 
 module.exports = {
     index: async (req, res) => {
+        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
         let { query } = req;
         Student.get(query)
             .then(students => res.send(students))

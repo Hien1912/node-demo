@@ -3,7 +3,7 @@ const StudentController = require("../App/Controllers/StudentController");
 const StudentUploadAvatar = require("../App/Services/StudentUploadAvatar");
 const BookController = require('../App/Controllers/BookController');
 const BorrowController = require('../App/Controllers/BorrowController');
-
+const BookRequest = require('../App/Requests/BookRequest');
 
 Router.route("/students")
     .get(StudentController.index)
@@ -21,7 +21,7 @@ Router.route("/students/:id/t")
     .delete(StudentController.destroy)
 
 Router.route("/books")
-    .get(BookController.index)
+    .get(BookRequest.index, BookController.index)
     .post(BookController.store)
 
 Router.route("/books/:id")
