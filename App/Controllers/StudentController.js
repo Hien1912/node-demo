@@ -4,8 +4,9 @@ const DB = require("../../configs/database");
 
 module.exports = {
     index: async (req, res) => {
-        res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-        let { query } = req;
+        let { query: { page, per_page } } = req;
+        let query = { page: page ? +page : 1, per_page: per_page ? +per_page : 10 };
+
         Student.get(query)
             .then(students => res.send(students))
             .catch(err => {
@@ -130,9 +131,15 @@ module.exports = {
     },
 
     getTrashed: async (req, res) => {
+        let { query: { page, per_page } } = req;
+        let query = { page: page ? +page : 1, per_page: per_page ? +per_page : 10 };
+
         Student.getTrashed()
             .then(students => res.send(students))
-            .catch(err => res.sendStatus(500));
+            .catch(err => {
+                console.log(err.msg);
+                res.sendStatus(err.code)
+            });
     },
 
 }

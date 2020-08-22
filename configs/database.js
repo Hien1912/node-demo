@@ -1,6 +1,6 @@
 const Knex = require('knex');
 
-module.exports = Knex({
+const database = Knex({
     client: process.env.DB_CLIENT || "mysql",
     connection: {
         host: process.env.DB_HOST || "localhost",
@@ -10,3 +10,5 @@ module.exports = Knex({
         dateStrings: "DATE"
     }
 });
+
+module.exports = module.exports.DB = database;

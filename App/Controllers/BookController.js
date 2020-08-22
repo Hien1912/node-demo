@@ -2,8 +2,9 @@ const Book = require("../Model/Book");
 
 module.exports = {
     index: async (req, res) => {
-        let { query } = req;
-    
+        let { query: { page, per_page } } = req;
+        let query = { page: page ? +page : 1, per_page: per_page ? +per_page : 10 };
+
         Book.get(query)
             .then(books => res.send(books))
             .catch(err => {

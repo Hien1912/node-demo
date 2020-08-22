@@ -31,10 +31,7 @@ const books_raw = {
 }
 
 Borrow.get = async (query) => {
-    let { per_page = 10, page = 1 } = query;
-
-    per_page = parseInt(per_page);
-    page = parseInt(page);
+    let { per_page, page } = query;
     let offset = (page - 1) * per_page;
 
     return new Promise((resolve, reject) => {
@@ -67,9 +64,7 @@ Borrow.get = async (query) => {
 };
 
 Borrow.getReturned = async (query) => {
-    let { per_page = 10, page = 1 } = query;
-    per_page = parseInt(per_page);
-    page = parseInt(page);
+    let { per_page, page } = query;
     let offset = (page - 1) * per_page;
 
     return new Promise((resolve, reject) => {
@@ -87,12 +82,15 @@ Borrow.getReturned = async (query) => {
                 return borrow;
             });
 
+            let total_page = Math.ceil(total / per_page)
+            if (total_page < page) reject({ code: 404, msg: "Not Found" });
+
             resolve({
                 data: data,
                 meta: {
                     total_records: total,
                     current_page: page,
-                    total_page: Math.ceil(total / per_page),
+                    total_page: total_page,
                     per_page: per_page,
                 }
             })
@@ -101,11 +99,9 @@ Borrow.getReturned = async (query) => {
 };
 
 Borrow.getDue = async (query) => {
-    let { per_page = 10, page = 1 } = query;
-
-    per_page = parseInt(per_page);
-    page = parseInt(page);
+    let { per_page, page } = query;
     let offset = (page - 1) * per_page;
+
     return new Promise((resolve, reject) => {
         Promise.all([
             DB.table("borrows")

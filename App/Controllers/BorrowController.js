@@ -3,18 +3,19 @@ const DB = require("../../configs/database");
 
 module.exports = {
     index: async (req, res) => {
-        let { query } = req;
+        let { query: { page, per_page } } = req;
+        let query = { page: page ? +page : 1, per_page: per_page ? +per_page : 10 };
         Borrow.get(query)
             .then(borrows => res.send(borrows))
             .catch(err => {
-                console.log(err);
-                // console.log(err.msg);
-                // res.sendStatus(err.code);
+                console.log(err.msg);
+                res.sendStatus(err.code);
             });
     },
 
     getReturned: async (req, res) => {
-        let { query } = req;
+        let { query: { page, per_page } } = req;
+        let query = { page: page ? +page : 1, per_page: per_page ? +per_page : 10 };
         Borrow.getReturned(query)
             .then(borrows => res.send(borrows))
             .catch(err => {
@@ -24,7 +25,8 @@ module.exports = {
     },
 
     getDue: async (req, res) => {
-        let { query } = req;
+        let { query: { page, per_page } } = req;
+        let query = { page: page ? +page : 1, per_page: per_page ? +per_page : 10 };
         Borrow.getDue(query)
             .then(borrows => res.send(borrows))
             .catch(err => {
@@ -89,7 +91,7 @@ module.exports = {
             });
     },
 
-    return: async (req, res) => {
+    returnee: async (req, res) => {
         let { params: { id } } = req;
         Borrow.update(id)
             .then(borrow => borrow.update({ returned_at: DB.raw("now()") }))
