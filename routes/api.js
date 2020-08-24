@@ -12,6 +12,7 @@ const BorowRequest = require('../App/Requests/BorrowRequest');
 /**
  * ----- Router books -----
  */
+// Tat ca sach dang co, them moi sach
 Router
     .route("/books")
     .get(
@@ -25,6 +26,7 @@ Router
         BookController.store
     )
 
+// CHi tiet sach, cap nhat sach, xoa sach
 Router
     .route("/books/:id")
     .get(BookController.show)
@@ -39,6 +41,7 @@ Router
 /**
 * ----- Router students -----
 */
+// Danh sach students the moi student
 Router
     .route("/students")
     .get(
@@ -56,6 +59,7 @@ Router
 
 Router.get("/students/t", StudentController.getTrashed);
 
+// Chi tiet student, sua, xoa mem student
 Router
     .route("/students/:id")
     .get(StudentController.show)
@@ -69,6 +73,7 @@ Router
     )
     .delete(StudentController.delete)
 
+// Khoi phuc, xoa student khoi students
 Router
     .route("/students/:id/t")
     .put(StudentController.restore)
@@ -77,6 +82,7 @@ Router
 /**
  * ----- Router borrows -----
  */
+// Danh sach muon kem theo chi tiet student va chi tiet books, muon moi
 Router
     .route("/borrows")
     .get(
@@ -90,20 +96,24 @@ Router
         BorrowController.store
     )
 
+// Danh sach muon sach da tra kem theo chi tiet student va sach muon
 Router.get("/borrows/r",
     PaginateRequest,
     checkValidate,
     BorrowController.getReturned
 )
 
+// Danh sach muon sach chua tra da qua han kem theo chi tiet student va chi tiet sach
 Router.get("/borrows/d",
     PaginateRequest,
     checkValidate,
     BorrowController.getDue
 )
 
+// Tra sach
 Router.route("/borrows/:id/r").put(BorrowController.returnee);
 
+// Chi tiet muon, cap nhat, xoa muon
 Router
     .route("/borrows/:id")
     .get(BorrowController.show)
