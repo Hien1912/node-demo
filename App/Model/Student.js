@@ -13,6 +13,9 @@ Student.get = async (query) => {
         ]).then(results => {
             let [students, [{ total }]] = results;
 
+            let total_page = Math.ceil(total / per_page)
+            if (total_page < page) reject({ code: 404, msg: "Not Found" });
+
             resolve({
                 data: students,
                 meta: {

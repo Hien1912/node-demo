@@ -44,6 +44,10 @@ Borrow.get = async (query) => {
             DB.table('borrows').whereNull("returned_at").where("due_date", ">=", DB.raw("curdate()")).count({ total: 'id' })
         ]).then(raw_data => {
             let [borrows, [{ total }]] = raw_data;
+
+            let total_page = Math.ceil(total / per_page);
+            if (total_page < page) reject({ code: 404, msg: "Not Found" });
+
             let data = borrows.map(borrow => {
                 borrow.student = JSON.parse(borrow.student);
                 borrow.books = JSON.parse(borrow.books);
@@ -75,15 +79,17 @@ Borrow.getReturned = async (query) => {
                 .limit(per_page).offset(offset),
             DB.table('borrows').whereNotNull('returned_at').count({ total: 'id' })
         ]).then(raw_data => {
+
             let [borrows, [{ total }]] = raw_data;
+
+            let total_page = Math.ceil(total / per_page);
+            if (total_page < page) reject({ code: 404, msg: "Not Found" });
+
             let data = borrows.map(borrow => {
                 borrow.student = JSON.parse(borrow.student);
                 borrow.books = JSON.parse(borrow.books);
                 return borrow;
             });
-
-            let total_page = Math.ceil(total / per_page)
-            if (total_page < page) reject({ code: 404, msg: "Not Found" });
 
             resolve({
                 data: data,
@@ -112,6 +118,10 @@ Borrow.getDue = async (query) => {
             DB.table('borrows').whereNull('returned_at').where("due_date", "<", DB.raw("curdate()")).count({ total: 'id' })
         ]).then(raw_data => {
             let [borrows, [{ total }]] = raw_data;
+
+            let total_page = Math.ceil(total / per_page);
+            if (total_page < page) reject({ code: 404, msg: "Not Found" });
+
             let data = borrows.map(borrow => {
                 borrow.student = JSON.parse(borrow.student);
                 borrow.books = JSON.parse(borrow.books);
